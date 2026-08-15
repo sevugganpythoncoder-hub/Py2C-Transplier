@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Py2C Transpiler</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --muted-color: #94a3b8;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 700px;
+            margin: 20px;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+        .tagline {
+            font-size: 1.1rem;
+            color: var(--muted-color);
+            margin-bottom: 30px;
+        }
+        .features {
+            text-align: left;
+            margin: 30px 0;
+            background: rgba(15, 23, 42, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .features h3 {
+            margin-top: 0;
+            color: var(--accent-color);
+        }
+        .features ul {
+            padding-left: 20px;
+            margin: 0;
+            color: var(--muted-color);
+            line-height: 1.6;
+        }
+        .features li {
+            margin-bottom: 8px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: #0f172a;
+            font-weight: bold;
+            padding: 12px 30px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="badge">v1.1 Released • Windows Only</div>
+        <h1>Py2C Transpiler 🚀</h1>
+        <p class="tagline">A lightweight, high performance (kinda) desktop IDE and AST transpiler that converts Python code to C/C++ and runs them as an executable.</p>
+        
+        <a href="https://github.com/sevugganpythoncoder-hub/Py2C-Transplier/releases/tag/v1.1" class="btn">Download v1.1 (12 MB)</a>
+
+        <div class="features">
+            <h3>Features & Performance</h3>
+            <ul>
+                <li><strong>2 Tgs:</strong> Transpile Python to standard C (using bundled TinyCC) or C++ (via GCC/Clang).</li>
+                <li><strong>Relatable Fast:</strong> ~0.919s for compiling and running C, ~2.881s for C++.</li>
+                <li><strong>Built-in IDE:</strong> Dark-themed Tkinter editor featuring auto-indentation.</li>
+                <li><strong>Zero Dependencies:</strong> No installation required, everything is bundled into the executable.</li>
+                <li><strong>Supported Syntax:</strong> Variable assignments, math, loops (`range`), conditionals (`if/else`), `while` loops, lists, and user input.</li>
+            </ul>
+        </div>
+
+        <p style="font-size: 0.9rem; color: var(--muted-color);">
+            View source code on <a href="https://github.com/sevugganpythoncoder-hub/Py2C-Transplier" style="color: var(--accent-color); text-decoration: none;">GitHub</a>
+        </p>
+    </div>
+
+</body>
+</html>
