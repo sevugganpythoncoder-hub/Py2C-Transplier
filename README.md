@@ -21,6 +21,5 @@ It's A lightweight, high performance(kinda) desktop IDLE and AST transpiler that
 1. Clone the repository.
 3. Run executable to launch the IDE.
 
-# Offcial Website:
-https://sevugganpythoncoder-hub.github.io/Py2C-Transplier/
+
 
