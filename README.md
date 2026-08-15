@@ -16,5 +16,5 @@ It's A lightweight, high performance(kinda) desktop IDLE and AST transpiler that
 
 ## Getting Started
 1. Clone the repository.
-3. Run "Py2C.vername" to launch the IDE.
+3. Run executable to launch the IDE.
 
