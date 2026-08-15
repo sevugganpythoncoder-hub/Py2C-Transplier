@@ -48,6 +48,13 @@
             margin-bottom: 10px;
         }
 
+        h2 {
+            font-size: 1.3rem;
+            color: #f0f6fc;
+            margin-top: 40px;
+            margin-bottom: 15px;
+        }
+
         p {
             color: #8b949e;
             margin-bottom: 20px;
@@ -74,6 +81,8 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 0.9rem;
+            display: inline-block;
+            text-align: center;
         }
 
         .btn:hover {
@@ -104,6 +113,25 @@
             margin-bottom: 8px;
         }
 
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            padding: 12px 16px;
+            border-bottom: 1px solid #30363d;
+            color: #8b949e;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #21262d;
+            color: #f0f6fc;
+        }
+
         footer {
             margin-top: 60px;
             border-top: 1px solid #30363d;
@@ -125,32 +153,51 @@
         <a href="#" class="logo">py2c-transpiler</a>
         <nav>
             <a href="https://github.com/sevugganpythoncoder-hub/Py2C-Transplier">GitHub</a>
-            <a href="https://github.com/sevugganpythoncoder-hub/Py2C-Transplier/releases/tag/v1.1">Releases</a>
+            <a href="https://github.com/sevugganpythoncoder-hub/Py2C-Transplier/releases">Releases</a>
         </nav>
     </header>
 
     <main>
-        <h1>py2c v1.1</h1>
+        <h1 id="latest-title">py2c (Loading...)</h1>
         <p>A lightweight desktop IDE and AST transpiler that converts Python scripts to standard C/C++ and compiles them to standalone Windows executables.</p>
 
-        <div class="download-box">
+        <!-- Dynamic Latest Release Button Box -->
+        <div class="download-box" id="latest-box">
             <div>
-                <strong>Py2Cv1.1.zip</strong>
-                <div style="font-size: 0.8rem; color: #8b949e; margin-top: 4px;">Windows only • 12 MB • Bundled with TinyCC</div>
+                <strong id="latest-name">Fetching latest release...</strong>
+                <div style="font-size: 0.8rem; color: #8b949e; margin-top: 4px;">Windows standalone package</div>
             </div>
-            <a href="https://github.com/user-attachments/files/31096283/main.zip" class="btn">Download .zip</a>
+            <a href="#" id="latest-btn" class="btn" style="display:none;">Download .zip</a>
         </div>
 
         <h2>Performance & Architecture</h2>
         <ul>
             <li>Transpiles Python to C using TinyCC (~0.91s compile/run time).</li>
             <li>Supports C++ targets via GCC / Clang (~2.88s).</li>
-            <li>Includes a dark-themed Tkinter editor with auto-indent.</li>
-            <li>No ext installation req everything is alr inside.</li>
+            <li>Includes a dark-themed Tkinter editor with auto-indentation.</li>
+            <li>Zero external installation required—everything is self-contained.</li>
         </ul>
 
+        <h2>Version Archive</h2>
+        <div style="background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; margin: 20px 0;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Version</th>
+                        <th>Release Date</th>
+                        <th style="text-align: right;">Download</th>
+                    </tr>
+                </thead>
+                <tbody id="archive-table">
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: #8b949e;">Loading version history from GitHub...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
         <h2>Supported AST Syntax</h2>
-        <p>Handles basic variable assignments, math operations, range loops, if/else/elif conditional blocks, while loops, lists, and user input..,etc</p>
+        <p>Handles basic variable assignments, math operations, range loops, if/else/elif conditional blocks, while loops, lists, and user input.</p>
 
         <pre><span class="comment"># Input Python</span>
 x = <span class="string">10</span>
@@ -159,8 +206,55 @@ x = <span class="string">10</span>
     </main>
 
     <footer>
-        made w/h crushed hopes and dreams <a href="https://github.com/sevugganpythoncoder-hub">sevugganpythoncoder-hub</a>. Licensed under Apache 2.0.
+        Maintained by <a href="https://github.com/sevugganpythoncoder-hub">sevugganpythoncoder-hub</a>. Licensed under Apache 2.0.
     </footer>
 
+    <!-- JavaScript to auto-git GitHub Releases -->
+    <script>
+        const repo = "sevugganpythoncoder-hub/Py2C-Transplier";
+        
+        fetch(`https://api.github.com/repos/${repo}/releases`)
+            .then(response => response.json())
+            .then(releases => {
+                if (!releases || releases.length === 0) return;
+
+                
+                const latest = releases[0];
+                document.getElementById('latest-title').innerText = `py2c ${latest.tag_name}`;
+                document.getElementById('latest-name').innerText = latest.name || latest.tag_name;
+                
+                const latestAsset = latest.assets.find(asset => asset.name.endsWith('.zip')) || latest.assets[0];
+                if (latestAsset) {
+                    const btn = document.getElementById('latest-btn');
+                    btn.href = latestAsset.browser_download_url;
+                    btn.style.display = 'inline-block';
+                }
+
+                
+                const tableBody = document.getElementById('archive-table');
+                tableBody.innerHTML = ''; // Clear loading text
+
+                releases.forEach((rel, index) => {
+                    const date = rel.published_at.split('T')[0];
+                    const asset = rel.assets.find(a => a.name.endsWith('.zip')) || rel.assets[0];
+                    const downloadUrl = asset ? asset.browser_download_url : rel.html_url;
+                    const label = index === 0 ? `${rel.tag_name} (Latest)` : rel.tag_name;
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td style="color: #f0f6fc; ${index === 0 ? 'font-weight: bold;' : ''}">${label}</td>
+                        <td style="color: #8b949e;">${date}</td>
+                        <td style="text-align: right;">
+                            <a href="${downloadUrl}" class="btn" style="padding: 4px 12px; font-size: 0.8rem;">.zip</a>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(err => {
+                console.error("Failed to get GitHub releases:", err);
+                document.getElementById('archive-table').innerHTML = `<tr><td colspan="3" style="text-align: center; color: #ff7b72;">Failed to load releases automatically.</td></tr>`;
+            });
+    </script>
 </body>
 </html>
