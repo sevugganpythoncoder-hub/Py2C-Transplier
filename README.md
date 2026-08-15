@@ -1,5 +1,5 @@
 # Py2C-Transplier
-**Note:** Currently only supports Windows.
+**Note:** Currently only supports Windows.\
 It's A lightweight, high performance(kinda) desktop IDLE and AST transpiler that converts Python codes to C/C++ codes(your choice) and runs them as an exe
 
 # Features and How it works:
