@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>py2c-transpiler</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'JetBrains Mono', monospace;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.5;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-weight: 700;
+            color: #58a6ff;
+            text-decoration: none;
+        }
+
+        nav a {
+            color: #8b949e;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 0.9rem;
+        }
+
+        nav a:hover {
+            color: #58a6ff;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #f0f6fc;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+
+        .download-box {
+            background: #161b22;
+            border: 1px solid #30363d;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn {
+            background: #238636;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background: #2ea043;
+        }
+
+        pre {
+            background: #161b22;
+            border: 1px solid #30363d;
+            padding: 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            color: #e6edf3;
+            margin: 20px 0;
+        }
+
+        .comment { color: #8b949e; }
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+
+        ul {
+            padding-left: 20px;
+            color: #8b949e;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        footer {
+            margin-top: 60px;
+            border-top: 1px solid #30363d;
+            padding-top: 20px;
+            font-size: 0.8rem;
+            color: #8b949e;
+            text-align: center;
+        }
+
+        footer a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">py2c-transpiler</a>
+        <nav>
+            <a href="https://github.com/sevugganpythoncoder-hub/Py2C-Transplier">GitHub</a>
+            <a href="https://github.com/sevugganpythoncoder-hub/Py2C-Transplier/releases/tag/v1.1">Releases</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>py2c v1.1</h1>
+        <p>A lightweight desktop IDE and AST transpiler that converts Python scripts to standard C/C++ and compiles them to standalone Windows executables.</p>
+
+        <div class="download-box">
+            <div>
+                <strong>Py2Cv1.1.zip</strong>
+                <div style="font-size: 0.8rem; color: #8b949e; margin-top: 4px;">Windows only • 12 MB • Bundled with TinyCC</div>
+            </div>
+            <a href="https://github.com/user-attachments/files/31096283/main.zip" class="btn">Download .zip</a>
+        </div>
+
+        <h2>Performance & Architecture</h2>
+        <ul>
+            <li>Transpiles Python to C using TinyCC (~0.91s compile/run time).</li>
+            <li>Supports C++ targets via GCC / Clang (~2.88s).</li>
+            <li>Includes a dark-themed Tkinter editor with auto-indent.</li>
+            <li>No ext installation req everything is alr inside.</li>
+        </ul>
+
+        <h2>Supported AST Syntax</h2>
+        <p>Handles basic variable assignments, math operations, range loops, if/else/elif conditional blocks, while loops, lists, and user input..,etc</p>
+
+        <pre><span class="comment"># Input Python</span>
+x = <span class="string">10</span>
+<span class="keyword">if</span> x > <span class="string">5</span>:
+    <span class="keyword">print</span>(<span class="string">"Valid"</span>)</pre>
+    </main>
+
+    <footer>
+        made w/h crushed hopes and dreams <a href="https://github.com/sevugganpythoncoder-hub">sevugganpythoncoder-hub</a>. Licensed under Apache 2.0.
+    </footer>
+
+</body>
+</html>
