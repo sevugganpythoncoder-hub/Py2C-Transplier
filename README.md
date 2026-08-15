@@ -12,7 +12,7 @@ It's A lightweight, high performance(kinda) desktop IDLE and AST transpiler that
 -> Has support for AST syntax such as  variable assignments, math operations, basic loops ("range"), conditional blocks \
 
 ("if/else/elif"), "while"` loops, lists, and user input.(Planning on expanding soon)\
--
+
 ->P.S No need to download any other softwares as all of them are already bundled up as an executable\
 
 ## Getting Started
