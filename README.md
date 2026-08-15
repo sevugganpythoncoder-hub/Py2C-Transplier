@@ -10,7 +10,6 @@ It's A lightweight, high performance(kinda) desktop IDLE and AST transpiler that
 ->Its remotely fast in a sense as it uses TinyTCC and GCC to compiler/Transpile them.(Exact Timer Measurements are 0.919 sec for compiling and runnin C. similarily for C++ it takes 2.881)\
 
 -> Has support for AST syntax such as  variable assignments, math operations, basic loops ("range"), conditional blocks \
-
 ("if/else/elif"), "while"` loops, lists, and user input.(Planning on expanding soon)\
 
 ->P.S No need to download any other softwares as all of them are already bundled up as an executable\
