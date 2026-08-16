@@ -69,6 +69,12 @@ class Eng(ast.NodeVisitor):
             ops_map = {ast.Eq: "==", ast.NotEq: "!=", ast.Lt: "<", ast.LtE: "<=", ast.Gt: ">", ast.GtE: ">="}
             op = ops_map.get(type(n.ops[0]), "==")
             right = self.exp(n.comparators[0])
+            
+            if self.m == "c" and (self.inf(n.left) == "string" or self.inf(n.comparators[0]) == "string"):
+                if op == "==":
+                    return f"(strcmp({left}, {right}) == 0)"
+                elif op == "!=":
+                    return f"(strcmp({left}, {right}) != 0)"
             return f"({left} {op} {right})"
         elif isinstance(n, ast.Call):
             fname = getattr(n.func, 'id', '')
@@ -136,8 +142,8 @@ class Eng(ast.NodeVisitor):
         if isinstance(val_node, ast.Call) and getattr(val_node.func, 'id', '') == 'input':
             prompt = self.exp(val_node.args[0]) if val_node.args else ""
             if self.m == "cpp":
-                if prompt: self.buf.append(f"{self.pad()}cout << {prompt};")
-                self.buf.append(f"{self.pad()}string {v};\n{self.pad()}getline(cin, {v});")
+                if prompt: self.buf.append(f"{self.pad()}cout << {prompt} << flush;")
+                self.buf.append(f"{self.pad()}string {v};\n{self.pad()}if(cin.peek() == '\\n') cin.ignore();\n{self.pad()}getline(cin, {v});\n{self.pad()}if (!{v}.empty() && {v}.back() == '\\r') {v}.pop_back();")
             else:
                 if prompt: self.buf.append(f"{self.pad()}printf(\"%s\", {prompt});")
                 self.buf.append(f"{self.pad()}char {v}[256];\n{self.pad()}fgets({v}, sizeof({v}), stdin);\n{self.pad()}{v}[strcspn({v}, \"\\r\\n\")] = 0;")
@@ -199,7 +205,7 @@ class Eng(ast.NodeVisitor):
         self.buf.append(f"{self.pad()}continue;")
 
     def visit_Pass(self, n):
-        self.buf.append(f"{self.pad()}/* pass */")
+        self.buf.append(f"{self.pad()};")
 
     def visit_Expr(self, n):
         if isinstance(n.value, ast.Call) and getattr(n.value.func, 'id', '') == "print":
@@ -262,14 +268,14 @@ class App(tk.Tk):
         self.t3.pack(fill="both", expand=True)
         p1.add(f3)
 
-        code = 'x = 10\nwhile x > 0:\n    if x == 5:\n        x = x - 1\n        continue\n    print(x)\n    x = x - 1'
+        code = 'user_input = input("Continue? (y/n): ")\nif user_input == "y":\n    print("Continuing...")\nelse:\n    print("Exiting...")'
         self.t1.insert("1.0", code)
         self.chk()
 
     def indent(self, event):
-        line = self.t1.get("insert linestart", "insert")
-        pad = "".join(char for char in line if char in (" ", "\t"))
-        if line.strip().endswith(":"):
+        curr_line_before_cursor = self.t1.get("insert linestart", "insert")
+        pad = "".join(char for char in curr_line_before_cursor if char in (" ", "\t"))
+        if curr_line_before_cursor.strip().endswith(":"):
             pad += "    "
         self.t1.insert("insert", "\n" + pad)
         return "break"
@@ -324,12 +330,16 @@ class App(tk.Tk):
             
         tdir = os.path.join(root, "tcc")
         tbin = os.path.join(tdir, "tcc.exe")
-        cc, is_tcc = (tbin, True) if m == "c" and os.path.exists(tbin) else (None, False)
+        
+        cc = None
         env = os.environ.copy()
         compile_flags = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
 
-        if not cc:
-            for c in (["tcc", "gcc"] if m == "c" else ["g++", "clang++"]):
+        if m == "c" and os.path.exists(tbin):
+            cc = tbin
+        else:
+            candidates = ["tcc", "gcc", "clang"] if m == "c" else ["g++", "clang++"]
+            for c in candidates:
                 try:
                     subprocess.run([c, "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.DEVNULL, creationflags=compile_flags, env=env)
                     cc = c
@@ -342,30 +352,24 @@ class App(tk.Tk):
             return
 
         try:
-            if is_tcc or cc == "tcc":
-                cmd = [
-                    cc, 
-                    f"-B{tdir}", 
-                    f"-I{os.path.join(tdir, 'include')}", 
-                    f"-L{os.path.join(tdir, 'lib')}", 
-                    "-run", 
-                    src_f
-                ] if is_tcc else [cc, "-run", src_f]
-                
-                res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, text=True, timeout=5, creationflags=compile_flags, env=env)
-                self.set_log(res.stdout or res.stderr or "Done", col="#a6e3a1" if res.returncode == 0 else "#f38ba8")
+            if cc == tbin:
+                compile_cmd = [cc, f"-B{tdir}", f"-I{os.path.join(tdir, 'include')}", f"-L{os.path.join(tdir, 'lib')}", src_f, "-o", exe_f]
             else:
-                cres = subprocess.run([cc, "-O2", src_f, "-o", exe_f], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.DEVNULL, text=True, creationflags=compile_flags, env=env)
-                if cres.returncode != 0:
-                    self.set_log(f"Compilation Error:\n{cres.stderr}", col="#f38ba8")
-                    return
-                if os.name == "nt":
-                    subprocess.Popen(f'start cmd /k "{exe_f} & pause & exit"', shell=True)
-                else:
-                    subprocess.Popen([exe_f])
-                self.set_log("Running in interactive console win...", col="#a6e3a1")
+                compile_cmd = [cc, "-O2", src_f, "-o", exe_f]
+
+            cres = subprocess.run(compile_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.DEVNULL, text=True, creationflags=compile_flags, env=env)
+            if cres.returncode != 0:
+                self.set_log(f"Compilation Error:\n{cres.stderr}", col="#f38ba8")
+                return
+
+            if os.name == "nt":
+                subprocess.Popen(f'start cmd /k "{exe_f} & pause & exit"', shell=True)
+            else:
+                subprocess.Popen([exe_f])
+            
+            self.set_log("Running in interactive console window...", col="#a6e3a1")
         except subprocess.TimeoutExpired:
-            self.set_log("Execution timed out (5s limit).", col="#f38ba8")
+            self.set_log("Execution timed out.", col="#f38ba8")
         except Exception as e:
             self.set_log(f"Error: {e}", col="#f38ba8")
         finally:
