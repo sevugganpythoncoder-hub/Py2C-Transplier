@@ -297,11 +297,11 @@ class App(tk.Tk):
             e = Eng(m=self.lvar.get())
             self.last = e.visit(tree)
             self.set_out(self.last, col="#89b4fa")
-            self.lbl.config(text="Status: OK", fg="#a6e3a1")
+            self.lbl.config(text="Status: OK", inc="#a6e3a1" if hasattr(self.lbl, 'config') else None)
         except Exception as err:
             msg = f"Error: {err}\n\n" + "".join(traceback.format_exception(type(err), err, err.__traceback__))
             self.set_out(msg, col="#f38ba8")
-            self.lbl.config(text="Status: Syntax Error", fg="#f38ba8")
+            self.lbl.config(text="Status: Syntax Error")
 
     def go(self):
         m = self.lvar.get().lower()
@@ -317,7 +317,12 @@ class App(tk.Tk):
         with open(src_f, "w", encoding="utf-8") as f:
             f.write(src)
 
-        root = os.path.dirname(sys.executable) if getattr(sys, 'frozen', False) else os.getcwd()
+        
+        if getattr(sys, 'frozen', False):
+            root = sys._MEIPASS
+        else:
+            root = os.getcwd()
+            
         tdir = os.path.join(root, "tcc")
         tbin = os.path.join(tdir, "tcc.exe")
         cc, is_tcc = (tbin, True) if m == "c" and os.path.exists(tbin) else (None, False)
@@ -339,7 +344,16 @@ class App(tk.Tk):
 
         try:
             if is_tcc or cc == "tcc":
-                cmd = [cc, f"-I{os.path.join(tdir, 'include')}", f"-L{os.path.join(tdir, 'lib')}", "-run", src_f] if is_tcc else [cc, "-run", src_f]
+                # Explicitly pass include and library directories to TCC so headers like stdio.h can be found
+                cmd = [
+                    cc, 
+                    f"-B{tdir}", 
+                    f"-I{os.path.join(tdir, 'include')}", 
+                    f"-L{os.path.join(tdir, 'lib')}", 
+                    "-run", 
+                    src_f
+                ] if is_tcc else [cc, "-run", src_f]
+                
                 res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, text=True, timeout=5, creationflags=compile_flags, env=env)
                 self.set_log(res.stdout or res.stderr or "Done", col="#a6e3a1" if res.returncode == 0 else "#f38ba8")
             else:
