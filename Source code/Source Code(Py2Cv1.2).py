@@ -297,11 +297,11 @@ class App(tk.Tk):
             e = Eng(m=self.lvar.get())
             self.last = e.visit(tree)
             self.set_out(self.last, col="#89b4fa")
-            self.lbl.config(text="Status: OK", inc="#a6e3a1" if hasattr(self.lbl, 'config') else None)
+            self.lbl.config(text="Status: OK", fg="#a6e3a1")
         except Exception as err:
             msg = f"Error: {err}\n\n" + "".join(traceback.format_exception(type(err), err, err.__traceback__))
             self.set_out(msg, col="#f38ba8")
-            self.lbl.config(text="Status: Syntax Error")
+            self.lbl.config(text="Status: Syntax Error", fg="#f38ba8")
 
     def go(self):
         m = self.lvar.get().lower()
@@ -317,7 +317,6 @@ class App(tk.Tk):
         with open(src_f, "w", encoding="utf-8") as f:
             f.write(src)
 
-        
         if getattr(sys, 'frozen', False):
             root = sys._MEIPASS
         else:
@@ -344,7 +343,6 @@ class App(tk.Tk):
 
         try:
             if is_tcc or cc == "tcc":
-                # Explicitly pass include and library directories to TCC so headers like stdio.h can be found
                 cmd = [
                     cc, 
                     f"-B{tdir}", 
