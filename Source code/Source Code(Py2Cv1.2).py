@@ -365,7 +365,7 @@ class App(tk.Tk):
                     subprocess.Popen(f'start cmd /k "{exe_f} & pause & exit"', shell=True)
                 else:
                     subprocess.Popen([exe_f])
-                self.set_log("Running in interactive console window...", col="#a6e3a1")
+                self.set_log("Running in interactive console win...", col="#a6e3a1")
         except subprocess.TimeoutExpired:
             self.set_log("Execution timed out (5s limit).", col="#f38ba8")
         except Exception as e:
